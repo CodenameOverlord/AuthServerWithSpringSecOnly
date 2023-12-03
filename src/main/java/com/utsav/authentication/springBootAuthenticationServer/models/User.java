@@ -1,10 +1,7 @@
 package com.utsav.authentication.springBootAuthenticationServer.models;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,9 +17,9 @@ public class User extends BaseModel{
     private String dob;
     @Enumerated(EnumType.ORDINAL)
     private UserStatus userStatus = UserStatus.ACTIVE;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Session> sessions;
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Role> roles;
 
 }

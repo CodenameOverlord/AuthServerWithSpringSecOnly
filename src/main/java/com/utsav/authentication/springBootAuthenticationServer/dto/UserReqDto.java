@@ -20,7 +20,7 @@ public class UserReqDto {
     public User convertToUser(){
         User user = new User();
         user.setEmail(this.getEmail());
-        user.setPassword(this.getPassword());
+//        user.setPassword(this.getPassword());
         user.setDob(this.getDob());
         return user;
     }

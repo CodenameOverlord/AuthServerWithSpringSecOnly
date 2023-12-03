@@ -11,6 +11,7 @@ import com.utsav.authentication.springBootAuthenticationServer.repositories.Role
 import com.utsav.authentication.springBootAuthenticationServer.repositories.UserRepository;
 import com.utsav.authentication.springBootAuthenticationServer.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,12 +24,15 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 
     @Override
     public Optional<UserResDto> createUser(UserReqDto userReqDto) {
         if(checkValid(userReqDto)) {
             User user = userReqDto.convertToUser();
+            user.setPassword(passwordEncoder.encode(userReqDto.getPassword()));
             user.setStatus(Status.ACTIVE);
             User userSaved = userRepository.save(user);
             if (userReqDto.getRoles() != null && userReqDto.getRoles().size() > 0) {
@@ -38,6 +42,7 @@ public class UserServiceImpl implements UserService {
                     role.setStatus(Status.ACTIVE);
                     role.setRole(roleStr);
                     role.setUser(user);
+                    roles.add(role);
                     roleRepository.save(role);
                 }
                 userSaved.setRoles(roles);
